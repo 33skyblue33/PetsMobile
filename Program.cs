@@ -1,5 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using PetsMobile.Data;
+using PetsMobile.Repository;
+using PetsMobile.Repository.Interface;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -7,6 +9,7 @@ string? connectionString = builder.Configuration.GetConnectionString("DefaultCon
 
 
 builder.Services.AddDbContext<DatabaseContext>(options=>options.UseSqlite(connectionString));
+builder.Services.AddScoped<IPetRepository, PetRepository>();
 builder.Services.AddControllers();
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
