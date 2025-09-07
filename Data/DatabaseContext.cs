@@ -24,6 +24,8 @@ namespace PetsMobile.Data
     public class DatabaseContext : DbContext
     {
         public DbSet<Pet> Pets { get; set; }
+        public DbSet<Breed> Breeds { get; set; }
+
         public DatabaseContext(DbContextOptions<DatabaseContext> options) : base(options) 
         {
         }

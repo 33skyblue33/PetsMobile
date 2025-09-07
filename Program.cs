@@ -3,15 +3,22 @@ using PetsMobile;
 using PetsMobile.Data;
 using PetsMobile.Repository;
 using PetsMobile.Repository.Interface;
+using PetsMobile.Services;
+using PetsMobile.Services.Interface;
 
 var builder = WebApplication.CreateBuilder(args);
 
 string? connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
 
-builder.Services.AddDbContext<DatabaseContext>(options=>options.UseSqlite(connectionString));
+builder.Services.AddDbContext<DatabaseContext>(options=>options.UseInMemoryDatabase(connectionString ?? ""));
+
 builder.Services.AddScoped<IPetRepository, PetRepository>();
+builder.Services.AddScoped<IBreedRepository, BreedRepository>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+
+builder.Services.AddScoped<IPetService, PetService>();
+
 builder.Services.AddControllers();
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();

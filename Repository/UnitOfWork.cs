@@ -2,7 +2,7 @@
 using PetsMobile.Data;
 using PetsMobile.Repository.Interface;
 
-namespace PetsMobile
+namespace PetsMobile.Repository
 {
     public class UnitOfWork : IUnitOfWork
     {

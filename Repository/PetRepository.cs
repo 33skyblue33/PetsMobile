@@ -8,6 +8,7 @@ namespace PetsMobile.Repository
     public class PetRepository : IPetRepository
     {
         private readonly DatabaseContext _databaseContext;
+        
         public PetRepository(DatabaseContext databaseContext)
         {
             _databaseContext = databaseContext;
