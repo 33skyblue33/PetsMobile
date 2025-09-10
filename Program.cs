@@ -18,11 +18,12 @@ builder.Services.AddScoped<IBreedRepository, BreedRepository>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 builder.Services.AddScoped<IPetService, PetService>();
+builder.Services.AddScoped<IBreedService, BreedService>();
 
-builder.Services.AddControllers();
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
 
 var app = builder.Build();
 

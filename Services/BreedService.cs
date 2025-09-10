@@ -1,42 +1,73 @@
-﻿using PetsMobile.Repository.Interface;
+﻿using PetsMobile.Entities;
+using PetsMobile.Repository;
+using PetsMobile.Repository.Interface;
 using PetsMobile.Services.DTO;
 using PetsMobile.Services.Interface;
+using PetsMobile.Services.Mapper;
 
 namespace PetsMobile.Services
 {
     public class BreedService : IBreedService
     {
         private readonly IBreedRepository _breedRepository;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public  BreedService(IBreedRepository breedRepository)
+        public BreedService(IBreedRepository breedRepository, IUnitOfWork unitOfWork)
         {
             _breedRepository = breedRepository;
+            _unitOfWork = unitOfWork;
         }
 
-        public async Task<PetDTO> CreateAsync(BreedRequest data)
+        public async Task<BreedDTO> CreateAsync(BreedRequest data)
         {
-            throw new NotImplementedException();
-        
+            Breed breed = BreedMapper.BreedRequestToBreed(data);
+            await _breedRepository.AddAsync(breed);
+            await _unitOfWork.CompleteAsync();
+
+            return BreedMapper.BreedToBreedDTO(breed);
         }
 
-        public Task<bool> DeleteAsync(long id)
+        public async Task<bool> DeleteAsync(long id)
         {
-            throw new NotImplementedException();
+            Breed? breed = await _breedRepository.GetByIdAsync(id);
+
+            if (breed == null)
+            {
+                return false;
+            }
+
+            _breedRepository.Remove(breed);
+            return await _unitOfWork.CompleteAsync() != 0;
         }
 
-        public Task<List<BreedDTO>> GetAllAsync()
+
+        public async Task<BreedDTO?> GetByIdAsync(long id)
         {
-            throw new NotImplementedException();
+            Breed? breed = await _breedRepository.GetByIdAsync(id);
+
+            if (breed == null)
+            {
+                return null;
+            }
+
+            return BreedMapper.BreedToBreedDTO(breed);
         }
 
-        public Task<BreedDTO?> GetByIdAsync(long id)
+        public async Task<bool> UpdateAsync(long id, BreedRequest data)
         {
-            throw new NotImplementedException();
+            Breed? breed = await _breedRepository.GetByIdAsync(id);
+
+            if (breed == null)
+            {
+                return false;
+            }
+
+            BreedMapper.MapBreed(breed, data);
+
+            return await _unitOfWork.CompleteAsync() != 0;
         }
 
-        public Task<bool> UpdateAsync(long id, BreedRequest data)
-        {
-            throw new NotImplementedException();
-        }
     }
 }
+    
+
