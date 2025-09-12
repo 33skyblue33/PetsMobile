@@ -25,9 +25,18 @@ namespace PetsMobile.Data
     {
         public DbSet<Pet> Pets { get; set; }
         public DbSet<Breed> Breeds { get; set; }
+        public DbSet<User> Users { get; set; }
 
         public DatabaseContext(DbContextOptions<DatabaseContext> options) : base(options) 
         {
+        }
+    }
+
+    public class UserConfiguration : IEntityTypeConfiguration<User>
+    {
+        public void Configure(EntityTypeBuilder<User> builder)
+        {
+            builder.HasKey(u => u.Id);
         }
     }
 }

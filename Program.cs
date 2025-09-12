@@ -15,6 +15,7 @@ builder.Services.AddDbContext<DatabaseContext>(options=>options.UseInMemoryDatab
 
 builder.Services.AddScoped<IPetRepository, PetRepository>();
 builder.Services.AddScoped<IBreedRepository, BreedRepository>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 builder.Services.AddScoped<IPetService, PetService>();
