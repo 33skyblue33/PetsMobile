@@ -24,6 +24,11 @@ namespace PetsMobile.Repository
             return await _databaseContext.Users.FirstOrDefaultAsync(x => x.Email == email);
         }
 
+        public async Task<bool> ExistsByEmailAsync(string email)
+        {
+            return await _databaseContext.Users.AnyAsync(x => x.Email == email);
+        }
+
         public async Task<User?> GetByIdAsync(long id)
         {
             return await _databaseContext.Users.FirstOrDefaultAsync(x => x.Id == id);
@@ -31,7 +36,7 @@ namespace PetsMobile.Repository
 
         public void Remove(User user)
         {
-            _databaseContext.Remove(user);
+            _databaseContext.Users.Remove(user);
         }
     }
 }
