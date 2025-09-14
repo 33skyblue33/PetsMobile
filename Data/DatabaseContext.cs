@@ -4,6 +4,15 @@ using PetsMobile.Entities;
 
 namespace PetsMobile.Data
 {
+    public class RefreshTokenConfiguration : IEntityTypeConfiguration<RefreshToken>
+    {
+        public void Configure(EntityTypeBuilder<RefreshToken> builder)
+        {
+            builder.HasKey(r => r.Id);
+            builder.HasOne(r => r.User).WithMany().HasForeignKey(r => r.Id).IsRequired();
+        }
+    }
+
     public class PetConfiguration : IEntityTypeConfiguration<Pet>
     {
         public void Configure(EntityTypeBuilder<Pet> builder)
@@ -26,6 +35,7 @@ namespace PetsMobile.Data
         public DbSet<Pet> Pets { get; set; }
         public DbSet<Breed> Breeds { get; set; }
         public DbSet<User> Users { get; set; }
+        public DbSet<RefreshToken> RefreshTokens { get; set; }
 
         public DatabaseContext(DbContextOptions<DatabaseContext> options) : base(options) 
         {
@@ -39,4 +49,5 @@ namespace PetsMobile.Data
             builder.HasKey(u => u.Id);
         }
     }
+
 }
