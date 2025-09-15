@@ -18,7 +18,8 @@ namespace PetsMobile.Services.Mapper
                 Surname = data.Surname,
                 Age = data.Age,
                 Email = data.Email,
-                Password = data.Password
+                Password = data.Password,
+                Role = Role.User
             };
         }
 
