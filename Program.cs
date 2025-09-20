@@ -21,9 +21,13 @@ builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 
 builder.Services.AddScoped<IPasswordHasher, PasswordHasher>();
+builder.Services.AddScoped<ITokenGenerator, TokenGenerator>();
 builder.Services.AddScoped<IPetService, PetService>();
 builder.Services.AddScoped<IBreedService, BreedService>();
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IAuthService, AuthService>();
+
+builder.Services.AddHostedService<RefreshTokenCleanupService>();
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();

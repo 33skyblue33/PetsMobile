@@ -26,7 +26,7 @@ namespace PetsMobile.Services
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<IAuthService.AuthResult?> LoginAsync(string email, string password)
+        public async Task<AuthResult?> LoginAsync(string email, string password)
         {
             if (!await _userRepository.ExistsByEmailAsync(email))
             {
@@ -50,10 +50,10 @@ namespace PetsMobile.Services
 
             string accessToken = _tokenGenerator.GenerateAccessToken(user);
 
-            return new IAuthService.AuthResult(UserMapper.UserToUserDTO(user),accessToken, refreshToken);
+            return new AuthResult(UserMapper.UserToUserDTO(user), accessToken, refreshToken);
         }
 
-        public async Task<IAuthService.AuthResult?> RefreshAsync(string refreshToken)
+        public async Task<AuthResult?> RefreshAsync(string refreshToken)
         {
             RefreshToken? token = await _refreshTokenRepository.GetByTokenAsync(refreshToken);
 
@@ -74,7 +74,7 @@ namespace PetsMobile.Services
                 return null;
             }
 
-            return new IAuthService.AuthResult(UserMapper.UserToUserDTO(token.User), accessToken, newToken);
+            return new AuthResult(UserMapper.UserToUserDTO(token.User), accessToken, newToken);
         }
 
         public async Task<bool> LogoutAsync(string refreshToken)
@@ -90,7 +90,17 @@ namespace PetsMobile.Services
             return await _unitOfWork.CompleteAsync() != 0;
         }
 
-       
+        public async Task<long> RemoveAllInactiveTokens()
+        {
+            List<RefreshToken> refreshTokens = await _refreshTokenRepository.GetAllInactiveAsync();
+
+            foreach (RefreshToken refreshToken in refreshTokens)
+            {
+                _refreshTokenRepository.Remove(refreshToken);
+            }
+
+            return await _unitOfWork.CompleteAsync();
+        }
     }
 
 }    
