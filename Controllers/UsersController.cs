@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using PetsMobile.Services;
 using PetsMobile.Services.DTO;
@@ -33,12 +34,14 @@ namespace PetsMobile.Controllers
         }
 
         [HttpPut("{id}")]
+        [Authorize(Roles = "User,Employee")]
         public async Task<ActionResult> Update(long id, [FromBody] UserRequest data)
         {
             return await _userService.UpdateAsync(id, data) ? Ok() : NotFound();
         }
 
         [HttpDelete("{id}")]
+        [Authorize(Roles = "User,Employee")]
         public async Task<ActionResult> Delete(long id)
         {
             return await _userService.DeleteAsync(id) ? NoContent() : NotFound();

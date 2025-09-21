@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using PetsMobile.Entities;
@@ -11,10 +12,12 @@ using PetsMobile.Services.Mapper;
 public class AuthController : ControllerBase
 {
     private readonly IAuthService _authService;
+    private readonly ILogger<AuthController> _logger;
 
-    public AuthController(IAuthService authService)
+    public AuthController(IAuthService authService, ILogger<AuthController> logger)
     {
         _authService = authService;
+        _logger = logger;
     }
 
     [HttpPost("login")]
@@ -36,6 +39,7 @@ public class AuthController : ControllerBase
     {
         if (!Request.Cookies.TryGetValue("refreshToken", out string? token))
         {
+            _logger.LogInformation("test1");
             return Unauthorized();
         }
 
@@ -43,6 +47,7 @@ public class AuthController : ControllerBase
 
         if (result == null)
         {
+            _logger.LogInformation("test2");
             return Unauthorized();
         }
 

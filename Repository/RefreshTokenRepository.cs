@@ -19,7 +19,7 @@ namespace PetsMobile.Repository
 
         public async Task<List<RefreshToken>> GetAllInactiveAsync()
         {
-            return await _databaseContext.RefreshTokens.Include(r => r.User).Where(r => !r.IsActive).ToListAsync();
+            return await _databaseContext.RefreshTokens.Include(r => r.User).Where(r => DateTime.UtcNow >= r.Expires || r.Revoked != null).ToListAsync();
         }
 
         public async Task<RefreshToken?> GetByTokenAsync(string token)

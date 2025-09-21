@@ -1,8 +1,6 @@
 ﻿
 namespace PetsMobile.Services.DTO
 {
-    public record UserDTO(long Id, string Name, string Surname, int Age, string Email)
-    {
-        public IEnumerable<object> Roles { get; internal set; }
-    }
+    public record UserDTO(long Id, string Name, string Surname, int Age, string Email);
+
 }

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using PetsMobile.Entities;
 using PetsMobile.Services.DTO;
 using PetsMobile.Services.Interface;
@@ -25,6 +26,7 @@ namespace PetsMobile.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles ="Employee")]
         public async Task<ActionResult<BreedDTO>> Create([FromBody] BreedRequest data)
         {
             BreedDTO breed = await _breedService.CreateAsync(data);
@@ -32,12 +34,14 @@ namespace PetsMobile.Controllers
         }
 
         [HttpPut("{id}")]
+        [Authorize(Roles = "Employee")]
         public async Task<ActionResult<BreedDTO>> Update(long id , [FromBody] BreedRequest data)
         {
             return await _breedService.UpdateAsync(id, data) ? Ok(data) : NotFound();
         }
 
         [HttpDelete("{id}")]
+        [Authorize(Roles = "Employee")]
         public async Task<ActionResult<BreedDTO>> Delete(long id)
         {
             return await _breedService.DeleteAsync(id) ? NoContent() : NotFound();

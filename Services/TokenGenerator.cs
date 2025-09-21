@@ -16,7 +16,7 @@ namespace PetsMobile.Services
         public TokenGenerator(IConfiguration configuration)
         {
             _configuration = configuration;
-            _securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration.GetValue<string>("jwt:key") ?? ""));
+            _securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration.GetValue<string>("Jwt:Key") ?? ""));
         }
 
         public string GenerateAccessToken(User user)
