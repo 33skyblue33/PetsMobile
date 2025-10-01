@@ -26,7 +26,7 @@ namespace PetsMobile.Controllers
         }
 
         [HttpPost]
-        [Authorize(Roles ="Employee")]
+        //[Authorize(Roles ="Employee")]
         public async Task<ActionResult<BreedDTO>> Create([FromBody] BreedRequest data)
         {
             BreedDTO breed = await _breedService.CreateAsync(data);

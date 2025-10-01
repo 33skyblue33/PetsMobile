@@ -32,6 +32,7 @@ namespace PetsMobile.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Employee")]
         public async Task<ActionResult> Create([FromBody] PetRequest data)
         {
             PetDTO pet = await _petService.CreateAsync(data);

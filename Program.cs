@@ -12,10 +12,10 @@ using PetsMobile.Services.Interface;
 
 var builder = WebApplication.CreateBuilder(args);
 
-string? connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+string? connectionString = builder.Configuration.GetConnectionString("Prod");
 
 
-builder.Services.AddDbContext<DatabaseContext>(options=>options.UseInMemoryDatabase(connectionString ?? ""));
+builder.Services.AddDbContext<DatabaseContext>(options=>options.UseSqlite(connectionString ?? ""));
 
 builder.Services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
 builder.Services.AddScoped<IPetRepository, PetRepository>();
