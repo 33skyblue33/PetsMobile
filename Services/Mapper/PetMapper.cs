@@ -20,24 +20,24 @@ public static class PetMapper {
     return pets.Select(PetToPetDTO).ToList();
   }
   public static Pet PetRequestToPet(PetRequest petRequest,
-    Breed breed) {
+    Breed breed, string imageUrl) {
     return new Pet() {
       Name = petRequest.Name,
       Color = petRequest.Color,
       Age = petRequest.Age,
-      ImageUrl = petRequest.ImageUrl,
+      ImageUrl = imageUrl,
       Description = petRequest.Description,
       Breed = breed
     };
   }
   public static void MapPet(Pet pet,
     Breed breed,
-    PetRequest data) {
+    PetRequest data, string? imageUrl) {
     
     pet.Name = data.Name;
     pet.Color = data.Color;
     pet.Age = data.Age;
-    pet.ImageUrl = data.ImageUrl;
+    pet.ImageUrl = imageUrl != null ? imageUrl : pet.ImageUrl;
     pet.Description = data.Description;
     pet.Breed = breed;
   }

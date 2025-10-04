@@ -1,4 +1,4 @@
 ﻿namespace PetsMobile.Services.DTO;
 
-public record PetRequest(string Name,string Color,int Age,string ImageUrl,string Description,  long BreedId);
+public record PetRequest(string Name,string Color,int Age,IFormFile? Image,string Description, long BreedId);
 

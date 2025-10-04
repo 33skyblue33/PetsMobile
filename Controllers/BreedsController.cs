@@ -25,8 +25,14 @@ namespace PetsMobile.Controllers
             return breed != null ? Ok(breed) : NotFound();
         }
 
+        [HttpGet]
+        public async Task<ActionResult<List<BreedDTO>>> GetAll()
+        {
+            return Ok(await _breedService.GetAllAsync());
+        }
+
         [HttpPost]
-        //[Authorize(Roles ="Employee")]
+        [Authorize(Roles ="Employee")]
         public async Task<ActionResult<BreedDTO>> Create([FromBody] BreedRequest data)
         {
             BreedDTO breed = await _breedService.CreateAsync(data);

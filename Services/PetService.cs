@@ -31,9 +31,9 @@ public class PetService : IPetService {
   public async Task<List<PetDTO>> GetAllAsync() {
     return PetMapper.PetListToPetDTOList(await _petRepository.GetAllAsync());
   }
-  public async Task<PetDTO> CreateAsync(PetRequest data) {
+  public async Task<PetDTO> CreateAsync(PetRequest data, string imageUrl) {
     Breed? breed = await _breedRepository.GetByIdAsync(data.BreedId);
-    Pet pet = PetMapper.PetRequestToPet(data, breed);
+    Pet pet = PetMapper.PetRequestToPet(data, breed, imageUrl);
     
     await _petRepository.AddAsync(pet);
     await _unitOfWork.CompleteAsync();
@@ -41,7 +41,7 @@ public class PetService : IPetService {
     return PetMapper.PetToPetDTO(pet);
   }
   public async Task<bool> UpdateAsync(long id,
-    PetRequest data) {
+    PetRequest data, string? imageUrl) {
     Pet? pet = await _petRepository.GetByIdAsync(id);
     Breed? breed = await _breedRepository.GetByIdAsync(data.BreedId);
 
@@ -50,19 +50,19 @@ public class PetService : IPetService {
         return false; 
     }
     
-    PetMapper.MapPet(pet, breed, data);
+    PetMapper.MapPet(pet, breed, data, imageUrl);
     
     return await _unitOfWork.CompleteAsync() != 0;
   }
-  public async Task<bool> DeleteAsync(long id) {
+  public async Task<string?> DeleteAsync(long id) {
     Pet? pet = await _petRepository.GetByIdAsync(id);
 
     if(pet == null)
     {
-       return false;
+       return null;
     }
     
     _petRepository.Remove(pet);
-    return await _unitOfWork.CompleteAsync() != 0;
+    return await _unitOfWork.CompleteAsync() != 0 ? pet.ImageUrl : null;
   }
 }

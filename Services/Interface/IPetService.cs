@@ -5,9 +5,9 @@
   public interface IPetService {
     Task<PetDTO?> GetByIdAsync(long id);
     Task<List<PetDTO>> GetAllAsync();
-    Task<PetDTO> CreateAsync(PetRequest data);
-    Task<bool> UpdateAsync(long id,
-      PetRequest data);
-    Task<bool> DeleteAsync(long id);
+    Task<PetDTO> CreateAsync(PetRequest data, string imageUrl);
+    Task<bool> UpdateAsync(long id, PetRequest data, string? imageUrl);
+    //Returns image url of the deleted pet
+    Task<string?> DeleteAsync(long id);
   }
 }

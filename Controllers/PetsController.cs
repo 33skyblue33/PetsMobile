@@ -11,10 +11,12 @@ namespace PetsMobile.Controllers
     public class PetsController : ControllerBase
     {
         private readonly IPetService _petService;
+        private readonly IImageService _imageService;
 
-        public PetsController(IPetService petService)
+        public PetsController(IPetService petService, IImageService imageService)
         {
             _petService = petService;
+            _imageService = imageService;
         }
 
         [HttpGet("{id}")]
@@ -33,25 +35,43 @@ namespace PetsMobile.Controllers
 
         [HttpPost]
         [Authorize(Roles = "Employee")]
-        public async Task<ActionResult> Create([FromBody] PetRequest data)
+        public async Task<ActionResult> Create([FromForm] PetRequest data)
         {
-            PetDTO pet = await _petService.CreateAsync(data);
+            if (data.Image == null || data.Image.Length == 0)
+            {
+                return BadRequest("An image file is required.");
+            }
+
+            string imageUrl = await _imageService.SaveImageAsync(data.Image, HttpContext);
+            PetDTO pet = await _petService.CreateAsync(data, imageUrl);
 
             return CreatedAtAction(nameof(GetById), new { id = pet.Id }, pet);
         }
 
         [HttpPut("{id}")]
         [Authorize(Roles = "Employee")]
-        public async Task<ActionResult> Update(long id, [FromBody] PetRequest data)
+        public async Task<ActionResult> Update(long id, [FromForm] PetRequest data)
         {
-            return await _petService.UpdateAsync(id, data) ? Ok() : NotFound();
+            string? imageUrl = data.Image != null && data.Image.Length != 0 ? 
+                await _imageService.SaveImageAsync(data.Image, HttpContext)
+                : null;
+
+            return await _petService.UpdateAsync(id, data, imageUrl) ? Ok() : NotFound();
         }
 
         [HttpDelete("{id}")]
         [Authorize(Roles = "Employee")]
         public async Task<ActionResult> Delete(long id)
         {
-            return await _petService.DeleteAsync(id) ? NoContent() : NotFound();
+            string? imageUrl = await _petService.DeleteAsync(id);
+
+            if (imageUrl == null)
+            {
+                return NotFound();
+            }
+
+            _imageService.DeleteImage(imageUrl);
+            return NoContent();
         }
     }
 }

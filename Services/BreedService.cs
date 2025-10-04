@@ -40,6 +40,12 @@ namespace PetsMobile.Services
             return await _unitOfWork.CompleteAsync() != 0;
         }
 
+        public async Task<List<BreedDTO>> GetAllAsync()
+        {
+            List<Breed> breeds = await _breedRepository.GetAllAsync();
+
+            return breeds.Select(BreedMapper.BreedToBreedDTO).ToList();
+        }
 
         public async Task<BreedDTO?> GetByIdAsync(long id)
         {
