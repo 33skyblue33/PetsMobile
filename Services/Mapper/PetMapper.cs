@@ -4,7 +4,7 @@ using DTO;
 using Entities;
 
 public static class PetMapper {
-  public static PetDTO PetToPetDTO(Pet pet) {
+  public static PetDTO PetToPetDTO(Pet pet, double averageRating) {
     return new PetDTO(
       pet.Id,
       pet.Name,
@@ -12,13 +12,16 @@ public static class PetMapper {
       pet.Age,
       pet.ImageUrl,
       pet.Description,
+      averageRating,
       pet.Breed.Name, 
       pet.Breed.Description
     );
   }
-  public static List<PetDTO> PetListToPetDTOList(List<Pet> pets) {
-    return pets.Select(PetToPetDTO).ToList();
+  
+  public static List<PetDTO> PetListToPetDTOList(List<Pet> pets, Dictionary<long, double> averageRatings) {
+    return pets.Select(p => PetToPetDTO(p, averageRatings.TryGetValue(p.Id, out double rating) ? rating : 0.0)).ToList();
   }
+  
   public static Pet PetRequestToPet(PetRequest petRequest,
     Breed breed, string imageUrl) {
     return new Pet() {

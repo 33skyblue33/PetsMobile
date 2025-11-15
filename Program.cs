@@ -21,6 +21,7 @@ builder.Services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
 builder.Services.AddScoped<IPetRepository, PetRepository>();
 builder.Services.AddScoped<IBreedRepository, BreedRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IRatingRepository, RatingRepository>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 

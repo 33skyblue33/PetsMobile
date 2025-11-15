@@ -1,7 +1,11 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using PetsMobile.Data;
+using PetsMobile.Entities;
 using PetsMobile.Services.DTO;
+using PetsMobile.Services.Exceptions;
 using PetsMobile.Services.Interface;
 
 namespace PetsMobile.Controllers
@@ -72,6 +76,36 @@ namespace PetsMobile.Controllers
 
             _imageService.DeleteImage(imageUrl);
             return NoContent();
+        }
+
+        [HttpGet("{id}/Ratings")]
+        public async Task<ActionResult<PagedResult<RatingDTO>>> GetRatings(long id, [FromQuery] long? pointer,
+            [FromQuery] int pageSize = 10)
+        {
+            return Ok(await _petService.GetRatingsAsync(id, pointer, pageSize));
+        }
+
+        [HttpPost("{id}/Ratings")]
+        [Authorize(Roles = "User,Employee")]
+        public async Task<ActionResult> AddRating(long id, [FromBody] RatingRequest data)
+        {
+            try
+            {
+                if (!long.TryParse(User.FindFirstValue(ClaimTypes.NameIdentifier), out long userId))
+                {
+                    return Unauthorized();
+                }
+
+                RatingDTO? rating = await _petService.AddRatingAsync(id, userId, data);
+
+                return rating != null
+                    ? CreatedAtRoute("GetRatingById", new { id = rating.Id }, rating)
+                    : BadRequest();
+            }
+            catch (InvalidRatingException ex)
+            {
+                return UnprocessableEntity(ex.Message);
+            }
         }
     }
 }

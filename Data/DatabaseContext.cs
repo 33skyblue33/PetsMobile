@@ -19,6 +19,7 @@ namespace PetsMobile.Data
         {
             builder.HasKey(p => p.Id);
             builder.HasOne(p => p.Breed).WithMany().HasForeignKey(p=>p.Id).IsRequired();
+            builder.HasMany(p => p.Ratings).WithOne().HasForeignKey(c => c.PetId).IsRequired();
         }
     }
 
@@ -29,6 +30,23 @@ namespace PetsMobile.Data
             builder.HasKey(b => b.Id);
         }
     }
+    
+    public class UserConfiguration : IEntityTypeConfiguration<User>
+    {
+        public void Configure(EntityTypeBuilder<User> builder)
+        {
+            builder.HasKey(u => u.Id);
+        }
+    }
+
+    public class RatingConfiguration : IEntityTypeConfiguration<Rating>
+    {
+        public void Configure(EntityTypeBuilder<Rating> builder)
+        {
+            builder.HasKey(b => b.Id);
+            builder.HasOne(b => b.User).WithMany().HasForeignKey(b => b.UserId).IsRequired();
+        }
+    }
 
     public class DatabaseContext : DbContext
     {
@@ -36,17 +54,10 @@ namespace PetsMobile.Data
         public DbSet<Breed> Breeds { get; set; }
         public DbSet<User> Users { get; set; }
         public DbSet<RefreshToken> RefreshTokens { get; set; }
+        public DbSet<Rating> Ratings { get; set; }
 
         public DatabaseContext(DbContextOptions<DatabaseContext> options) : base(options) 
         {
-        }
-    }
-
-    public class UserConfiguration : IEntityTypeConfiguration<User>
-    {
-        public void Configure(EntityTypeBuilder<User> builder)
-        {
-            builder.HasKey(u => u.Id);
         }
     }
 

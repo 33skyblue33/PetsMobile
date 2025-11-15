@@ -1,4 +1,6 @@
-﻿namespace PetsMobile.Services.Interface
+﻿using PetsMobile.Data;
+
+namespace PetsMobile.Services.Interface
 {
   using DTO;
 
@@ -9,5 +11,7 @@
     Task<bool> UpdateAsync(long id, PetRequest data, string? imageUrl);
     //Returns image url of the deleted pet
     Task<string?> DeleteAsync(long id);
+    Task<PagedResult<RatingDTO>> GetRatingsAsync(long id, long? pointer, int pageSize);
+    Task<RatingDTO?> AddRatingAsync(long id, long userId, RatingRequest data);
   }
 }
