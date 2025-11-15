@@ -12,6 +12,7 @@ public static class PetMapper {
       pet.Age,
       pet.ImageUrl,
       pet.Description,
+      pet.Rating,
       pet.Breed.Name, 
       pet.Breed.Description
     );

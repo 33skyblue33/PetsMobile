@@ -32,5 +32,11 @@ namespace PetsMobile.Repository
         {
            _databaseContext.Pets.Remove(pet);
         }
+
+        public Task Update(Pet pet)
+        {
+            _databaseContext.Entry(pet).State = EntityState.Modified;
+            return Task.CompletedTask;
+        }
     }
 }

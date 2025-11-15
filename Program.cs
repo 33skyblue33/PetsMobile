@@ -31,6 +31,8 @@ builder.Services.AddScoped<IBreedService, BreedService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IImageService, ImageService>();
+builder.Services.AddScoped<IRatingService, RatingService>();
+builder.Services.AddScoped<ICommentService, CommentService>();
 
 builder.Services.AddHostedService<RefreshTokenCleanupService>();
 

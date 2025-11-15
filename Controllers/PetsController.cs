@@ -12,11 +12,31 @@ namespace PetsMobile.Controllers
     {
         private readonly IPetService _petService;
         private readonly IImageService _imageService;
+        private readonly IRatingService _ratingService;
 
-        public PetsController(IPetService petService, IImageService imageService)
+        public PetsController(IPetService petService, IImageService imageService, IRatingService ratingService)
         {
             _petService = petService;
             _imageService = imageService;
+            _ratingService = ratingService;
+        }
+
+        [HttpPut("{id}/rating")]
+        public async Task<ActionResult> UpdatePetRating(long id, [FromBody] RatingDTO rating)
+        {
+            try
+            {
+                await _ratingService.UpdatePetRating(id, rating.Rating);
+                return NoContent();
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
         }
 
         [HttpGet("{id}")]
