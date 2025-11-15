@@ -10,6 +10,7 @@ namespace PetsMobile.Repository.Interface
         Task AddAsync(Pet pet);
         Task<List<Pet>> GetAllAsync();
         void Remove(Pet pet);
-        
+
+        Task Update(Pet pet);
     }
 }

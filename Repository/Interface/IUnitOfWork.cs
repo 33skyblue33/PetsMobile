@@ -5,6 +5,8 @@ namespace PetsMobile.Repository.Interface
 {
     public interface IUnitOfWork
     {
-        Task<int> CompleteAsync();
+        IPetRepository PetRepository { get; }
+        ICommentRepository CommentRepository { get; }
+        Task<int> SaveChangesAsync();
     }
 }

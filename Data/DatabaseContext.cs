@@ -36,6 +36,7 @@ namespace PetsMobile.Data
         public DbSet<Breed> Breeds { get; set; }
         public DbSet<User> Users { get; set; }
         public DbSet<RefreshToken> RefreshTokens { get; set; }
+        public DbSet<Comment> Comments { get; set; }
 
         public DatabaseContext(DbContextOptions<DatabaseContext> options) : base(options) 
         {
@@ -50,4 +51,13 @@ namespace PetsMobile.Data
         }
     }
 
+    public class CommentConfiguration : IEntityTypeConfiguration<Comment>
+    {
+        public void Configure(EntityTypeBuilder<Comment> builder)
+        {
+            builder.HasKey(c => c.Id);
+            builder.HasOne(c => c.Pet).WithMany().HasForeignKey(c => c.PetId).IsRequired();
+            builder.HasOne(c => c.User).WithMany().HasForeignKey(c => c.UserId).IsRequired();
+        }
+    }
 }
