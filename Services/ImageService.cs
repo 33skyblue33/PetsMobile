@@ -54,11 +54,8 @@ namespace PetsMobile.Services
             {
                 await imageFile.CopyToAsync(fileStream);
             }
-
-            HttpRequest request = context.Request;
-            var baseUrl = $"{request.Scheme}://{request.Host}";
-
-            return $"{baseUrl}/images/{uniqueFileName}";
+            
+            return $"/images/{uniqueFileName}";
         }
     }
 }
